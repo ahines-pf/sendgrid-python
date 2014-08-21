@@ -9,3 +9,7 @@ sdist
 *.egg-info
 *.pyc
 venv/
+*.py[cod]
+.pydevproject
+.project
+.settings/

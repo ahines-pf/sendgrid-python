@@ -47,6 +47,7 @@ class Mail(SMTPAPIHeader):
         self.files = opts.get('files', {})
         self.headers = opts.get('headers', '')
         self.date = opts.get('date', rfc822.formatdate())
+        self.content = opts.get('content', [])
 
     def parse_and_add(self, to):
         super(Mail, self).add_to(to)
