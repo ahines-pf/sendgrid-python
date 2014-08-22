@@ -143,7 +143,7 @@ with a CID and reference that in your HTML.:
 
     message = sendgrid.Mail()
     message.add_attachment('image1.jpg', './image1.jpg', cid='my-embedded-image')
-    message.set_html('<html><body><p>Hi!</p><img src="cid:my-embedded-image"><p>Bye</p></body></html>')
+    message.set_html('<html><body><img src="cid:my-embedded-image"></body></html>')
 
 SendGrid's `X-SMTPAPI`_
 -----------------------
