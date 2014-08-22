@@ -73,9 +73,9 @@ class SendGridClient(object):
                 del values[k]
         for filename in message.files:
             if message.files[filename]:
-                values['files[{}]'.format(filename)] = message.files[filename]
+                values['files[%s]' % filename] = message.files[filename]
         for filename in message.content:
-            values['content[{}]'.format(filename)] = message.content[filename]
+            values['content[%s]' % filename] = message.content[filename]
         return values
 
     def _make_request(self, message):
