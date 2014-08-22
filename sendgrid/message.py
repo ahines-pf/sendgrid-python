@@ -28,6 +28,8 @@ class Mail(SMTPAPIHeader):
             date: Set date
             headers: Set headers
             files: Attachments
+            content: IDs associated with attached images required for
+                old-school inline embedding with <img src="cid:your-id-here">
         """
         super(Mail, self).__init__()
         self.to = []
@@ -47,7 +49,7 @@ class Mail(SMTPAPIHeader):
         self.files = opts.get('files', {})
         self.headers = opts.get('headers', '')
         self.date = opts.get('date', rfc822.formatdate())
-        self.content = opts.get('content', [])
+        self.content = opts.get('content_id_map', [])
 
     def parse_and_add(self, to):
         super(Mail, self).add_to(to)
@@ -118,20 +120,24 @@ class Mail(SMTPAPIHeader):
     def set_replyto(self, replyto):
         self.reply_to = replyto
 
-    def add_attachment(self, name, file_):
+    def add_attachment(self, name, file_, cid=None):
         if isinstance(file_, str):  # filepath
             with open(file_, 'rb') as f:
                 self.files[name] = f.read()
         elif hasattr(file_, 'read'):
             self.files[name] = file_.read()
+        if cid is not None:
+            self.content[name] = str(cid)
 
-    def add_attachment_stream(self, name, string):
+    def add_attachment_stream(self, name, string, cid=None):
         if isinstance(string, str):
             self.files[name] = string
         elif isinstance(string, io.BytesIO):
             self.files[name] = string.read()
         elif sys.version_info < (3, 0) and isinstance(string, unicode):
             self.files[name] = string
+        if cid is not None:
+            self.content[name] = str(cid)
 
     def set_headers(self, headers):
         self.headers = headers
